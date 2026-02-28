@@ -1,7 +1,17 @@
 "use client";
 
 import { useState } from "react";
-
+import StarIcon from '@mui/icons-material/Star';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import NoteAltIcon from '@mui/icons-material/NoteAlt';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import Groups3Icon from '@mui/icons-material/Groups3';
+import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
+import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
+import CheckIcon from '@mui/icons-material/Check';
 const SUBJECTS = ["数学", "物理", "英語", "プログラミング", "実験", "その他"];
 const PRIORITY_CONFIG = {
   S: { label: "緊急", color: "#ff2d55", bg: "rgba(255,45,85,0.15)", exp: 100 },
@@ -61,7 +71,7 @@ function Toast({ toasts }) {
           boxShadow: "0 4px 20px rgba(0,0,0,0.6)",
           maxWidth: 300,
         }}>
-          {t.type === "exp" ? "⭐" : t.type === "error" ? "💀" : "✅"} {t.message}
+          {t.type === "exp" ? <StarIcon/> : t.type === "error" ? "💀" : "✅"} {t.message}
         </div>
       ))}
     </div>
@@ -138,18 +148,18 @@ function TaskCard({ task, expanded, onToggle, onComplete, onDelete, onEdit }) {
                 padding: "8px 16px", backgroundColor: "rgba(48,209,88,0.12)",
                 border: "1px solid rgba(48,209,88,0.4)", borderRadius: 6,
                 color: "#30d158", fontSize: 13, cursor: "pointer", fontWeight: 700,
-              }}>⚔️ クリア！</button>
+              }}><EmojiEventsIcon/> クリア！</button>
             )}
             <button onClick={() => onEdit(task)} style={{
               padding: "8px 16px", backgroundColor: "rgba(10,132,255,0.08)",
               border: "1px solid rgba(10,132,255,0.3)", borderRadius: 6,
               color: "#0a84ff", fontSize: 13, cursor: "pointer",
-            }}>✏️ 編集</button>
+            }}><EditIcon/> 編集</button>
             <button onClick={() => onDelete(task.id)} style={{
               padding: "8px 16px", backgroundColor: "rgba(255,45,85,0.08)",
               border: "1px solid rgba(255,45,85,0.3)", borderRadius: 6,
               color: "#ff2d55", fontSize: 13, cursor: "pointer",
-            }}>🗑️ 削除</button>
+            }}><DeleteIcon/> 削除</button>
           </div>
         </div>
       )}
@@ -190,7 +200,7 @@ function TaskForm({ initial, onSave, onCancel }) {
         maxHeight: "90vh", overflowY: "auto",
       }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#30d158", marginBottom: 20, fontFamily: "monospace", letterSpacing: 2 }}>
-          {initial ? "⚔️ QUEST EDIT" : "⚔️ NEW QUEST"}
+          {initial ? <EditIcon/> + " QUEST EDIT" : <NoteAltIcon/> + " NEW QUEST"}
         </div>
 
         <label style={labelStyle}>クエスト名</label>
@@ -346,10 +356,10 @@ export default function QuestBoard() {
   const weeklyRanking = [...friends].sort((a, b) => b.completedThisWeek - a.completedThisWeek);
 
   const navItems = [
-    { key: "quests", icon: "📋", label: "クエスト" },
-    { key: "calendar", icon: "📅", label: "カレンダー" },
-    { key: "ranking", icon: "🏆", label: "ランキング" },
-    { key: "party", icon: "👥", label: "パーティ" },
+    { key: "quests", icon: <AssignmentTurnedInIcon/>, label: "クエスト" },
+    { key: "calendar", icon: <CalendarMonthIcon/>, label: "カレンダー" },
+    { key: "ranking", icon: <EmojiEventsIcon/>, label: "ランキング" },
+    { key: "party", icon: <Groups3Icon/>, label: "パーティ" },
   ];
 
   return (
@@ -430,10 +440,10 @@ export default function QuestBoard() {
           <div>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginBottom: 16 }}>
               {[
-                { label: "進行中", value: tasks.filter(t => !t.completed).length, icon: "⚔️", color: "#30d158" },
-                { label: "緊急", value: tasks.filter(t => !t.completed && getDaysLeft(t.deadline) <= 1).length, icon: "🔥", color: "#ff2d55" },
-                { label: "完了", value: tasks.filter(t => t.completed).length, icon: "✅", color: "#0a84ff" },
-                { label: "総EXP", value: totalExp.toLocaleString(), icon: "⭐", color: "#ff9f0a" },
+                { label: "進行中", value: tasks.filter(t => !t.completed).length, icon: <LocalFireDepartmentIcon/>, color: "#30d158" },
+                { label: "緊急", value: tasks.filter(t => !t.completed && getDaysLeft(t.deadline) <= 1).length, icon: <ReportGmailerrorredIcon/>, color: "#ff2d55" },
+                { label: "完了", value: tasks.filter(t => t.completed).length, icon: <CheckIcon/>, color: "#0a84ff" },
+                { label: "総EXP", value: totalExp.toLocaleString(), icon: <StarIcon/>, color: "#ff9f0a" },
               ].map(s => (
                 <div key={s.label} style={{
                   backgroundColor: "rgba(255,255,255,0.03)",
