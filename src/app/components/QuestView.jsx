@@ -1,6 +1,7 @@
 import StatsGrid from "./StatsGrid";
 import TaskFilters from "./TaskFilters";
 import TaskCard from "./TaskCard";
+import MonsterBattle from "./MonsterBattle";
 
 export default function QuestView({
   tasks, totalExp,
@@ -12,11 +13,22 @@ export default function QuestView({
   incomplete, complete,
   completeTask, deleteTask,
   setEditTask, setShowForm,
+  monster, monsterHp, onAttack, onNextMonster,
 }) {
   const handleEditTask = (t) => { setEditTask(t); setShowForm(true); };
 
   return (
     <div>
+      {/* モンスターバトル */}
+      <MonsterBattle
+        monster={monster}
+        monsterHp={monsterHp}
+        maxHp={monster.maxHp}
+        totalExp={totalExp}
+        onAttack={onAttack}
+        onNextMonster={onNextMonster}
+      />
+
       <StatsGrid tasks={tasks} totalExp={totalExp} />
       <TaskFilters
         filterScope={filterScope} onFilterScopeChange={setFilterScope}

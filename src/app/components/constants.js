@@ -43,3 +43,17 @@ export function calcLevel(exp) {
   const progress = ((exp - currentLevelExp) / (nextLevelExp - currentLevelExp)) * 100;
   return { level, progress, nextExp: nextLevelExp - exp };
 }
+
+export const MONSTERS = [
+  { name: "スライムキング",   emoji: "🟢", maxHp: 300,  level: 5  },
+  { name: "ゴブリン将軍",    emoji: "👺", maxHp: 700,  level: 20 },
+  { name: "闇の竜王",       emoji: "🐉", maxHp: 1500, level: 55 },
+  { name: "魔王アスモデウス", emoji: "😈", maxHp: 4000, level: 99 },
+];
+
+export const BATTLE_SKILLS = [
+  { name: "剣撃",    icon: "⚔️",  cost: 30,  damage: 80,   color: "#30d158", desc: "通常攻撃" },
+  { name: "魔法弾",  icon: "✨",  cost: 60,  damage: 200,  color: "#0a84ff", desc: "魔法攻撃" },
+  { name: "炎の渦",  icon: "🔥",  cost: 120, damage: 480,  color: "#ff9f0a", desc: "炎属性攻撃" },
+  { name: "究極奥義", icon: "💥", cost: 300, damage: 1400, color: "#ff2d55", desc: "全力必殺技" },
+];
