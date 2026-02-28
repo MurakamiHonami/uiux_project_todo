@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { initTasks, INITIAL_FRIENDS, getDaysLeft, calcLevel } from "./components/constants";
+import { initTasks, INITIAL_FRIENDS, getDaysLeft, calcLevel, MONSTERS } from "./components/constants";
 import BgGrid from "./components/BgGrid";
 import Header from "./components/Header";
 import NavBar from "./components/NavBar";
@@ -25,6 +25,10 @@ export default function QuestBoard() {
   const [calMonth, setCalMonth] = useState(new Date());
   const [editTask, setEditTask] = useState(null);
   const [friends] = useState(INITIAL_FRIENDS);
+
+  // モンスター状態
+  const [monsterIndex, setMonsterIndex] = useState(0);
+  const [monsterHp, setMonsterHp] = useState(MONSTERS[0].maxHp);
 
   const addToast = (message, type = "success") => {
     const id = Date.now().toString();
@@ -51,12 +55,15 @@ export default function QuestBoard() {
   const incomplete = filteredTasks.filter(t => !t.completed);
   const complete = filteredTasks.filter(t => t.completed);
 
+  // 課題クリア：提出期限までの残日数 × ベースEXP を獲得
   const completeTask = id => {
     const task = tasks.find(t => t.id === id);
     if (!task || task.completed) return;
+    const daysLeft = Math.max(1, getDaysLeft(task.deadline));
+    const earnedExp = task.exp * daysLeft;
     setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: true } : t));
-    setTotalExp(e => e + task.exp);
-    addToast(`+${task.exp} EXP 獲得！「${task.title}」クリア！`, "exp");
+    setTotalExp(e => e + earnedExp);
+    addToast(`+${earnedExp} EXP 獲得！(${task.exp}×${daysLeft}日) 「${task.title}」クリア！`, "exp");
   };
 
   const deleteTask = id => {
@@ -75,6 +82,20 @@ export default function QuestBoard() {
     }
     setShowForm(false);
     setEditTask(null);
+  };
+
+  // モンスターへの攻撃：EXP消費してダメージを与える
+  const handleAttack = (expCost, damage) => {
+    setTotalExp(e => Math.max(0, e - expCost));
+    setMonsterHp(hp => Math.max(0, hp - damage));
+  };
+
+  // 次のモンスターへ
+  const handleNextMonster = () => {
+    const nextIndex = (monsterIndex + 1) % MONSTERS.length;
+    setMonsterIndex(nextIndex);
+    setMonsterHp(MONSTERS[nextIndex].maxHp);
+    addToast(`${MONSTERS[nextIndex].name}が現れた！`, "error");
   };
 
   const { level, progress, nextExp: nexp } = calcLevel(totalExp);
@@ -98,6 +119,10 @@ export default function QuestBoard() {
             incomplete={incomplete} complete={complete}
             completeTask={completeTask} deleteTask={deleteTask}
             setEditTask={setEditTask} setShowForm={setShowForm}
+            monster={MONSTERS[monsterIndex]}
+            monsterHp={monsterHp}
+            onAttack={handleAttack}
+            onNextMonster={handleNextMonster}
           />
         )}
         {view === "calendar" && (
